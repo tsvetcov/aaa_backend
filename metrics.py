@@ -12,12 +12,18 @@ address = "http://localhost:8000/embed"
 
 latency = []
 inference_time = []
+total_memory = []
+memory_delta = []
+cpu_usage = []
 
 for i in range(N_REQUESTS):
     time_start = time.perf_counter()
     req = requests.post(address, json={"text": text})
     data = req.json()
     inference_time.append(data["inference_time"])
+    total_memory.append(data["memory"])
+    memory_delta.append(data["memory_change"])
+    cpu_usage.append(data["cpu_usage"])
     time_end = time.perf_counter()
     if req.status_code != 200:
         continue
@@ -50,3 +56,16 @@ print(f"Median inference time = {median_inference_time * 1000:.2f} мс")
 print(f"Total time = {total_time * 1000:.2f} мс")
 print(f"RPS = {rps:.2f}")
 print(f"WPS = {wps:.2f}")
+print(f"Total memory mean value= {np.mean(total_memory):.2f}")
+print(f"Memory used mean value = {np.mean(memory_delta):.2f}")
+print(f"CPU usage mean value = {np.mean(cpu_usage):.2f}")
+with open("benchmark_report.txt", "w", encoding="utf-8") as f:
+    f.write(f"RPS: {rps:.2f}\n")
+    f.write(f"WPS: {wps:.2f}\n")
+    f.write(f"Mean Latency: {mean_value * 1000:.2f} мс\n")
+    f.write(f"P50 Latency: {p50 * 1000:.2f} мс\n")
+    f.write(f"P95 Latency: {p95 * 1000:.2f} мс\n")
+    f.write(f"P99 Latency: {p99 * 1000:.2f} мс\n")
+    f.write(f"Median inference time: {median_inference_time * 1000:.2f} мс\n")
+    f.write(f"Mean CPU: {np.mean(cpu_usage):.2f}%\n")
+    f.write(f"Mean Memory: {np.mean(total_memory):.2f} МБ\n")

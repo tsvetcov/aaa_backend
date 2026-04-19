@@ -1,0 +1,9 @@
+RPS: 53.66
+WPS: 912.27
+Mean Latency: 19.06 мс
+P50 Latency: 17.85 мс
+P95 Latency: 26.33 мс
+P99 Latency: 33.49 мс
+Median inference time: 8.41 мс
+Mean CPU: 537.39%
+Mean Memory: 615.27 МБ
